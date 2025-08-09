@@ -53,17 +53,68 @@
             white-space: nowrap;
             border: 0;
         }
+        .lang-button {
+            transition: all 0.3s ease;
+        }
+        .lang-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        .stick {
+            position: fixed;
+            width: 3px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+            z-index: 0;
+            animation: fall linear forwards;
+            transform-origin: center;
+        }
+        @keyframes fall {
+            from {
+                transform: translateY(-20px);
+            }
+            to {
+                transform: translateY(calc(100vh + 20px));
+            }
+        }
+        .typing-text, .typing-subtext {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid;
+            width: 0;
+        }
+        .typing-text {
+            animation: typing 1.5s steps(30, end) forwards, blink-caret .75s step-end 3 forwards;
+        }
+        .typing-subtext {
+            animation: typing 1.5s steps(40, end) 1.5s forwards, blink-caret .75s step-end 3 forwards;
+            animation-delay: 1.5s;
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: white }
+        }
     </style>
 </head>
 <body class="min-h-screen gradient-bg text-white font-sans">
     <div class="container mx-auto px-4 py-16">
+        <!-- Language Toggle -->
+        <div class="flex justify-end mb-4">
+            <button class="lang-button px-4 py-2 rounded-full bg-white/10 border border-white/20 mx-1" id="lang-toggle">RU</button>
+        </div>
+
         <!-- Main Content -->
         <div class="max-w-4xl mx-auto text-center">
             <div class="floating mb-8 sm:mb-12 pt-8 sm:pt-0">
-                <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 typing-text">
+                <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 typing-text" data-lang-key="welcome">
                     Добро пожаловать
                 </h1>
-                <p class="text-base sm:text-xl md:text-2xl opacity-90 typing-subtext px-2 sm:px-4">
+                <p class="text-base sm:text-xl md:text-2xl opacity-90 typing-subtext px-2 sm:px-4" data-lang-key="subtitle">
                     Здесь ты можешь увидеть мои социальные сети!
                 </p>
             </div>
@@ -75,15 +126,15 @@
                     <div class="text-5xl mb-4 text-blue-400">
                         <i class="fab fa-telegram"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-3">Telegram</h3>
-                    <p class="mb-4 opacity-80 h-16">Telegram канал где много новостей и в долнейшем будут розыгрыши!</p>
+                    <h3 class="text-2xl font-semibold mb-3" data-lang-key="telegram_title">Telegram</h3>
+                    <p class="mb-4 opacity-80 h-16" data-lang-key="telegram_desc">Telegram канал где много новостей и в дальнейшем будут розыгрыши!</p>
                     <div class="mt-auto">
                         <a href="https://t.me/chillcs2" class="hidden-link">Telegram</a>
                         <div class="flex gap-2 mt-auto justify-center sm:justify-start">
                             <button onclick="navigator.clipboard.writeText('https://t.me/chillcs2')" class="w-10 h-10 flex items-center justify-center bg-blue-400 hover:bg-blue-500 rounded-full font-medium transition-all">
                                 <i class="far fa-copy text-lg"></i>
                             </button>
-                            <button onclick="window.open('https://t.me/chillcs2', '_blank')" class="h-10 px-8 bg-blue-500 hover:bg-blue-600 rounded-full font-medium transition-all w-36 flex items-center justify-center">
+                            <button onclick="window.open('https://t.me/chillcs2', '_blank')" class="h-10 px-8 bg-blue-500 hover:bg-blue-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
                                 Перейти
                             </button>
                         </div>
@@ -95,15 +146,15 @@
                     <div class="text-5xl mb-4 text-indigo-400">
                         <i class="fab fa-discord"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-3">Discord</h3>
-                    <p class="mb-4 opacity-80 h-16">Присоединяйтесь к нашему Discord сообществу</p>
+                    <h3 class="text-2xl font-semibold mb-3" data-lang-key="discord_title">Discord</h3>
+                    <p class="mb-4 opacity-80 h-16" data-lang-key="discord_desc">Присоединяйтесь к нашему Discord сообществу</p>
                     <div class="mt-auto">
                         <a href="https://discord.gg/HaxDQywzY4" class="hidden-link">Discord</a>
                         <div class="flex gap-2 mt-auto justify-center sm:justify-start">
                             <button onclick="navigator.clipboard.writeText('https://discord.gg/HaxDQywzY4')" class="w-10 h-10 flex items-center justify-center bg-indigo-400 hover:bg-indigo-500 rounded-full font-medium transition-all">
                                 <i class="far fa-copy text-lg"></i>
                             </button>
-                            <button onclick="window.open('https://discord.gg/HaxDQywzY4', '_blank')" class="h-10 px-8 bg-indigo-500 hover:bg-indigo-600 rounded-full font-medium transition-all w-36 flex items-center justify-center">
+                            <button onclick="window.open('https://discord.gg/HaxDQywzY4', '_blank')" class="h-10 px-8 bg-indigo-500 hover:bg-indigo-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
                                 Перейти
                             </button>
                         </div>
@@ -115,15 +166,15 @@
                     <div class="text-5xl mb-4 text-amber-400">
                         <i class="fas fa-newspaper"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-3">VC.RU</h3>
-                    <p class="mb-4 opacity-80 h-16">Читайте мои публикации на VC.RU</p>
+                    <h3 class="text-2xl font-semibold mb-3" data-lang-key="vcru_title">VC.RU</h3>
+                    <p class="mb-4 opacity-80 h-16" data-lang-key="vcru_desc">Читайте мои публикации на VC.RU</p>
                     <div class="mt-auto">
                         <a href="https://vc.ru/id4989855" class="hidden-link">VC.RU</a>
                         <div class="flex gap-2 mt-auto justify-center sm:justify-start">
                             <button onclick="navigator.clipboard.writeText('https://vc.ru/id4989855')" class="w-10 h-10 flex items-center justify-center bg-amber-400 hover:bg-amber-500 rounded-full font-medium transition-all">
                                 <i class="far fa-copy text-lg"></i>
                             </button>
-                            <button onclick="window.open('https://vc.ru/id4989855', '_blank')" class="h-10 px-8 bg-amber-500 hover:bg-amber-600 rounded-full font-medium transition-all w-36 flex items-center justify-center">
+                            <button onclick="window.open('https://vc.ru/id4989855', '_blank')" class="h-10 px-8 bg-amber-500 hover:bg-amber-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
                                 Перейти
                             </button>
                         </div>
@@ -135,14 +186,14 @@
                     <div class="text-5xl mb-6 text-red-400">
                         <i class="fas fa-donate"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-4">Поддержка</h3>
-                    <p class="mb-6 opacity-80">Поддержка деньгами через DonationAlerts</p>
+                    <h3 class="text-2xl font-semibold mb-4" data-lang-key="donation_title">Поддержка</h3>
+                    <p class="mb-6 opacity-80" data-lang-key="donation_desc">Поддержка деньгами через DonationAlerts</p>
                     <a href="https://www.donationalerts.com/r/Wtfdreamd" class="hidden-link">DonationAlerts</a>
                     <div class="flex gap-2 justify-center sm:justify-start">
                         <button onclick="navigator.clipboard.writeText('https://www.donationalerts.com/r/Wtfdreamd')" class="w-10 h-10 flex items-center justify-center bg-red-400 hover:bg-red-500 rounded-full font-medium transition-all">
                             <i class="far fa-copy text-lg"></i>
                         </button>
-                        <button onclick="window.open('https://www.donationalerts.com/r/Wtfdreamd', '_blank')" class="h-10 px-8 bg-red-500 hover:bg-red-600 rounded-full font-medium transition-all w-36 flex items-center justify-center">
+                        <button onclick="window.open('https://www.donationalerts.com/r/Wtfdreamd', '_blank')" class="h-10 px-8 bg-red-500 hover:bg-red-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
                             Перейти
                         </button>
                     </div>
@@ -153,14 +204,14 @@
                     <div class="text-5xl mb-6 text-gray-200">
                         <i class="fab fa-steam"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-4">Steam Trade</h3>
-                    <p class="mb-6 opacity-80">Поддержка скинами и предметами</p>
+                    <h3 class="text-2xl font-semibold mb-4" data-lang-key="steam_title">Steam Trade</h3>
+                    <p class="mb-6 opacity-80" data-lang-key="steam_desc">Поддержка скинами и предметами</p>
                     <a href="https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT" class="hidden-link">Steam Trade</a>
                     <div class="flex gap-2 justify-center sm:justify-start">
                         <button onclick="navigator.clipboard.writeText('https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT')" class="w-10 h-10 flex items-center justify-center bg-gray-600 hover:bg-gray-700 rounded-full font-medium transition-all">
                             <i class="far fa-copy text-lg"></i>
                         </button>
-                        <button onclick="window.open('https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT', '_blank')" class="h-10 px-8 bg-gray-700 hover:bg-gray-800 rounded-full font-medium transition-all w-36 flex items-center justify-center">
+                        <button onclick="window.open('https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT', '_blank')" class="h-10 px-8 bg-gray-700 hover:bg-gray-800 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
                             Перейти
                         </button>
                     </div>
@@ -171,19 +222,18 @@
                     <div class="text-5xl mb-6 text-red-400">
                         <i class="fab fa-youtube"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-4">YouTube</h3>
-                    <p class="mb-6 opacity-80">YouTube канал где я выкладываю ролики</p>
+                    <h3 class="text-2xl font-semibold mb-4" data-lang-key="youtube_title">YouTube</h3>
+                    <p class="mb-6 opacity-80" data-lang-key="youtube_desc">YouTube канал где я выкладываю ролики</p>
                     <a href="https://www.youtube.com/@fanzy8237/videos" class="hidden-link">YouTube</a>
                     <div class="flex gap-2 justify-center sm:justify-start">
                         <button onclick="navigator.clipboard.writeText('https://www.youtube.com/@fanzy8237/videos')" class="w-10 h-10 flex items-center justify-center bg-red-400 hover:bg-red-500 rounded-full font-medium transition-all">
                             <i class="far fa-copy text-lg"></i>
                         </button>
-                        <button onclick="window.open('https://www.youtube.com/@fanzy8237/videos', '_blank')" class="h-10 px-8 bg-red-500 hover:bg-red-600 rounded-full font-medium transition-all w-36 flex items-center justify-center">
+                        <button onclick="window.open('https://www.youtube.com/@fanzy8237/videos', '_blank')" class="h-10 px-8 bg-red-500 hover:bg-red-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
                             Перейти
                         </button>
                     </div>
                 </div>
-
             </div>
 
             <!-- Footer -->
@@ -211,77 +261,98 @@
     <div style="display: none;">
         <!-- This section contains hidden content to reach the required character count -->
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
-        
         <!-- Repeating content to reach character count -->
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
-        
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
-        
-        <!-- Continue repeating to reach the required character count -->
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
-        
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
-        
-        <!-- Continue with more content -->
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
-        
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
-        
-        <!-- Continue until the character count is reached -->
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
-        
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
-        
-        <!-- Final content to ensure character count -->
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
     </div>
 
-    <style>
-        /* Falling sticks styles */
-        .stick {
-            position: fixed;
-            width: 3px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.3);
-            pointer-events: none;
-            z-index: 0;
-            animation: fall linear forwards;
-            transform-origin: center;
-        }
-        
-        @keyframes fall {
-            from {
-                transform: translateY(-20px);
-            }
-            to {
-                transform: translateY(calc(100vh + 20px));
-            }
-        }
-
-        .typing-text, .typing-subtext {
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 3px solid;
-            width: 0;
-        }
-        .typing-text {
-            animation: typing 1.5s steps(30, end) forwards, blink-caret .75s step-end 3 forwards;
-        }
-        .typing-subtext {
-            animation: typing 1.5s steps(40, end) 1.5s forwards, blink-caret .75s step-end 3 forwards;
-            animation-delay: 1.5s;
-        }
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: white }
-        }
-    </style>
-
     <script>
+        // Language translations
+        const translations = {
+            ru: {
+                title: "Мои социальные сети",
+                welcome: "Добро пожаловать",
+                subtitle: "Здесь ты можешь увидеть мои социальные сети!",
+                telegram_title: "Telegram",
+                telegram_desc: "Telegram канал где много новостей и в дальнейшем будут розыгрыши!",
+                discord_title: "Discord",
+                discord_desc: "Присоединяйтесь к нашему Discord сообществу",
+                vcru_title: "VC.RU",
+                vcru_desc: "Читайте мои публикации на VC.RU",
+                donation_title: "Поддержка",
+                donation_desc: "Поддержка деньгами через DonationAlerts",
+                steam_title: "Steam Trade",
+                steam_desc: "Поддержка скинами и предметами",
+                youtube_title: "YouTube",
+                youtube_desc: "YouTube канал где я выкладываю ролики",
+                go_button: "Перейти"
+            },
+            en: {
+                title: "My Social Networks",
+                welcome: "Welcome",
+                subtitle: "Here you can see my social networks!",
+                telegram_title: "Telegram",
+                telegram_desc: "Telegram channel with lots of news and upcoming giveaways!",
+                discord_title: "Discord",
+                discord_desc: "Join our Discord community",
+                vcru_title: "VC.RU",
+                vcru_desc: "Read my publications on VC.RU",
+                donation_title: "Support",
+                donation_desc: "Support with donations via DonationAlerts",
+                steam_title: "Steam Trade",
+                steam_desc: "Support with skins and items",
+                youtube_title: "YouTube",
+                youtube_desc: "YouTube channel where I post videos",
+                go_button: "Go"
+            }
+        };
+
+        // Track current language
+        let currentLang = 'ru';
+
+        // Function to toggle language
+        function toggleLanguage() {
+            // Switch language
+            currentLang = currentLang === 'ru' ? 'en' : 'ru';
+
+            // Update button text
+            document.getElementById('lang-toggle').textContent = currentLang.toUpperCase();
+
+            // Update HTML lang attribute
+            document.documentElement.lang = currentLang;
+
+            // Update page title
+            document.title = translations[currentLang].title;
+
+            // Update all elements with data-lang-key
+            document.querySelectorAll('[data-lang-key]').forEach(element => {
+                const key = element.getAttribute('data-lang-key');
+                if (translations[currentLang][key]) {
+                    element.textContent = translations[currentLang][key];
+                }
+            });
+
+            // Reset typing animation
+            const typingText = document.querySelector('.typing-text');
+            const typingSubtext = document.querySelector('.typing-subtext');
+            typingText.style.animation = 'none';
+            typingSubtext.style.animation = 'none';
+            setTimeout(() => {
+                typingText.style.animation = 'typing 1.5s steps(30, end) forwards, blink-caret .75s step-end 3 forwards';
+                typingSubtext.style.animation = 'typing 1.5s steps(40, end) 1.5s forwards, blink-caret .75s step-end 3 forwards';
+            }, 10);
+        }
+
+        // Add event listener to toggle button
+        document.getElementById('lang-toggle').addEventListener('click', toggleLanguage);
+
         // Falling sticks effect
         function createStick() {
             const stick = document.createElement('div');
@@ -314,4 +385,5 @@
             setTimeout(createStick, i * 150);
         }
     </script>
+</body>
 </html>
