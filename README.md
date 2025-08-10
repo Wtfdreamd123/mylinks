@@ -1,9 +1,3 @@
----
-title: mylinks
-emoji: 🐳
-colorFrom: green
-colorTo: green
-sdk: static
-pinned: false
-
+Мой сайт где находится все мои соцсети!
+My website is where all my social networks are located!
 
