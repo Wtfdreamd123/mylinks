@@ -5,7 +5,5 @@ colorFrom: green
 colorTo: green
 sdk: static
 pinned: false
-tags:
-  - deepsite
----
+
 
