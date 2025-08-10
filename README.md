@@ -6,7 +6,7 @@ colorTo: green
 sdk: static
 pinned: false
 tags:
+  - deepsite
+---
 
-
-Сайт где находятся все мои соцсети.
-The site where all my social networks are located.
+Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
