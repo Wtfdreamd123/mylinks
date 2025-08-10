@@ -1,4 +1,3 @@
-Мой сайт где находится все мои соцсети!
+:flag_ru:Открытый проект моего личного сайта, где собраны все мои социальные сети!
 
-My website is where all my social networks are located!
-
+:flag_us:An open project of my personal website, where all my social networks are collected!
