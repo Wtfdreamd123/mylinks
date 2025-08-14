@@ -1,3 +1,12 @@
-🔗Открытый проект моего личного сайта, где собраны все мои социальные сети!
+---
+title: mylinks
+emoji: 🐳
+colorFrom: green
+colorTo: green
+sdk: static
+pinned: false
+tags:
+  - deepsite
+---
 
-🔗An open project of my personal website, where all my social networks are collected!
+Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference

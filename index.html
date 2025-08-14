@@ -103,6 +103,23 @@
                 transform: translateY(calc(100vh + 20px));
             }
         }
+        .cursor-trail {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: fade-trail 0.5s ease-out forwards;
+        }
+        .light-theme .cursor-trail {
+            background: rgba(0, 0, 0, 0.4);
+        }
+        @keyframes fade-trail {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
         .typing-text, .typing-subtext {
             overflow: hidden;
             white-space: nowrap;
@@ -178,10 +195,54 @@
         .light-theme .footer-text {
             color: #1f2937;
         }
+        .click-counter {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 8px;
+            text-align: center;
+        }
+        .light-theme .click-counter {
+            color: #1f2937;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #15803d; /* Green background for dark theme */
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: 1px solid #16a34a; /* Lighter green border */
+            opacity: 0;
+            transform: translateX(100%); /* Start off-screen to the right */
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 1000;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0); /* Slide in to final position */
+        }
+        .light-theme .toast {
+            background: #86efac; /* Lighter green for light theme */
+            color: #1f2937;
+            border: 1px solid #16a34a; /* Same green border */
+        }
+        .toast.error {
+            background: #dc2626;
+            border: 1px solid #991b1b;
+        }
+        .light-theme .toast.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #991b1b;
+        }
     </style>
 </head>
 <body class="min-h-screen gradient-bg text-white font-sans">
     <div class="container mx-auto px-4 py-16">
+        <!-- Toast Notification -->
+        <div id="toast" class="toast" data-lang-key="copy_notification">Ссылка скопирована!</div>
+
         <!-- Settings Button -->
         <div class="flex justify-end mb-4">
             <button class="settings-button px-4 py-2 rounded-full mx-1" id="settings-toggle">
@@ -222,13 +283,14 @@
                     <div class="mt-auto">
                         <a href="https://t.me/chillcs2" class="hidden-link">Telegram</a>
                         <div class="flex gap-2 mt-auto justify-center sm:justify-start">
-                            <button onclick="navigator.clipboard.writeText('https://t.me/chillcs2')" class="w-10 h-10 flex items-center justify-center bg-blue-400 hover:bg-blue-500 rounded-full font-medium transition-all">
+                            <button onclick="copyToClipboard('https://t.me/chillcs2')" class="w-10 h-10 flex items-center justify-center bg-blue-400 hover:bg-blue-500 rounded-full font-medium transition-all">
                                 <i class="far fa-copy text-lg"></i>
                             </button>
-                            <button onclick="window.open('https://t.me/chillcs2', '_blank')" class="h-10 px-8 bg-blue-500 hover:bg-blue-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
+                            <button onclick="incrementClickCounter('telegram'); window.open('https://t.me/chillcs2', '_blank')" class="h-10 px-8 bg-blue-500 hover:bg-blue-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
                                 Перейти
                             </button>
                         </div>
+                        <p class="click-counter" id="telegram-counter" data-lang-key="clicks">Кликов: 0</p>
                     </div>
                 </div>
 
@@ -242,13 +304,14 @@
                     <div class="mt-auto">
                         <a href="https://discord.gg/HaxDQywzY4" class="hidden-link">Discord</a>
                         <div class="flex gap-2 mt-auto justify-center sm:justify-start">
-                            <button onclick="navigator.clipboard.writeText('https://discord.gg/HaxDQywzY4')" class="w-10 h-10 flex items-center justify-center bg-indigo-400 hover:bg-indigo-500 rounded-full font-medium transition-all">
+                            <button onclick="copyToClipboard('https://discord.gg/HaxDQywzY4')" class="w-10 h-10 flex items-center justify-center bg-indigo-400 hover:bg-indigo-500 rounded-full font-medium transition-all">
                                 <i class="far fa-copy text-lg"></i>
                             </button>
-                            <button onclick="window.open('https://discord.gg/HaxDQywzY4', '_blank')" class="h-10 px-8 bg-indigo-500 hover:bg-indigo-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
+                            <button onclick="incrementClickCounter('discord'); window.open('https://discord.gg/HaxDQywzY4', '_blank')" class="h-10 px-8 bg-indigo-500 hover:bg-indigo-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
                                 Перейти
                             </button>
                         </div>
+                        <p class="click-counter" id="discord-counter" data-lang-key="clicks">Кликов: 0</p>
                     </div>
                 </div>
 
@@ -262,13 +325,14 @@
                     <div class="mt-auto">
                         <a href="https://vc.ru/id4989855" class="hidden-link">VC.RU</a>
                         <div class="flex gap-2 mt-auto justify-center sm:justify-start">
-                            <button onclick="navigator.clipboard.writeText('https://vc.ru/id4989855')" class="w-10 h-10 flex items-center justify-center bg-amber-400 hover:bg-amber-500 rounded-full font-medium transition-all">
+                            <button onclick="copyToClipboard('https://vc.ru/id4989855')" class="w-10 h-10 flex items-center justify-center bg-amber-400 hover:bg-amber-500 rounded-full font-medium transition-all">
                                 <i class="far fa-copy text-lg"></i>
                             </button>
-                            <button onclick="window.open('https://vc.ru/id4989855', '_blank')" class="h-10 px-8 bg-amber-500 hover:bg-amber-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
+                            <button onclick="incrementClickCounter('vcru'); window.open('https://vc.ru/id4989855', '_blank')" class="h-10 px-8 bg-amber-500 hover:bg-amber-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
                                 Перейти
                             </button>
                         </div>
+                        <p class="click-counter" id="vcru-counter" data-lang-key="clicks">Кликов: 0</p>
                     </div>
                 </div>
 
@@ -282,13 +346,14 @@
                     <div class="mt-auto">
                         <a href="https://www.donationalerts.com/r/Wtfdreamd" class="hidden-link">DonationAlerts</a>
                         <div class="flex gap-2 justify-center sm:justify-start">
-                            <button onclick="navigator.clipboard.writeText('https://www.donationalerts.com/r/Wtfdreamd')" class="w-10 h-10 flex items-center justify-center bg-red-400 hover:bg-red-500 rounded-full font-medium transition-all">
+                            <button onclick="copyToClipboard('https://www.donationalerts.com/r/Wtfdreamd')" class="w-10 h-10 flex items-center justify-center bg-red-400 hover:bg-red-500 rounded-full font-medium transition-all">
                                 <i class="far fa-copy text-lg"></i>
                             </button>
-                            <button onclick="window.open('https://www.donationalerts.com/r/Wtfdreamd', '_blank')" class="h-10 px-8 bg-red-500 hover:bg-red-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
+                            <button onclick="incrementClickCounter('donation'); window.open('https://www.donationalerts.com/r/Wtfdreamd', '_blank')" class="h-10 px-8 bg-red-500 hover:bg-red-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
                                 Перейти
                             </button>
                         </div>
+                        <p class="click-counter" id="donation-counter" data-lang-key="clicks">Кликов: 0</p>
                     </div>
                 </div>
 
@@ -302,13 +367,14 @@
                     <div class="mt-auto">
                         <a href="https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT" class="hidden-link">Steam Trade</a>
                         <div class="flex gap-2 justify-center sm:justify-start">
-                            <button onclick="navigator.clipboard.writeText('https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT')" class="w-10 h-10 flex items-center justify-center bg-gray-600 hover:bg-gray-700 rounded-full font-medium transition-all">
+                            <button onclick="copyToClipboard('https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT')" class="w-10 h-10 flex items-center justify-center bg-gray-600 hover:bg-gray-700 rounded-full font-medium transition-all">
                                 <i class="far fa-copy text-lg"></i>
                             </button>
-                            <button onclick="window.open('https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT', '_blank')" class="h-10 px-8 bg-gray-700 hover:bg-gray-800 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
+                            <button onclick="incrementClickCounter('steam'); window.open('https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT', '_blank')" class="h-10 px-8 bg-gray-700 hover:bg-gray-800 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
                                 Перейти
                             </button>
                         </div>
+                        <p class="click-counter" id="steam-counter" data-lang-key="clicks">Кликов: 0</p>
                     </div>
                 </div>
 
@@ -322,13 +388,14 @@
                     <div class="mt-auto">
                         <a href="https://www.youtube.com/@fanzy8237/videos" class="hidden-link">YouTube</a>
                         <div class="flex gap-2 justify-center sm:justify-start">
-                            <button onclick="navigator.clipboard.writeText('https://www.youtube.com/@fanzy8237/videos')" class="w-10 h-10 flex items-center justify-center bg-red-400 hover:bg-red-500 rounded-full font-medium transition-all">
+                            <button onclick="copyToClipboard('https://www.youtube.com/@fanzy8237/videos')" class="w-10 h-10 flex items-center justify-center bg-red-400 hover:bg-red-500 rounded-full font-medium transition-all">
                                 <i class="far fa-copy text-lg"></i>
                             </button>
-                            <button onclick="window.open('https://www.youtube.com/@fanzy8237/videos', '_blank')" class="h-10 px-8 bg-red-500 hover:bg-red-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
+                            <button onclick="incrementClickCounter('youtube'); window.open('https://www.youtube.com/@fanzy8237/videos', '_blank')" class="h-10 px-8 bg-red-500 hover:bg-red-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
                                 Перейти
                             </button>
                         </div>
+                        <p class="click-counter" id="youtube-counter" data-lang-key="clicks">Кликов: 0</p>
                     </div>
                 </div>
             </div>
@@ -358,7 +425,6 @@
     <div style="display: none;">
         <!-- This section contains hidden content to reach the required character count -->
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
-        <!-- Repeating content to reach character count -->
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus ante, ut condimentum urna. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. Fusce neque purus, adipiscing eu, ullamcorper ac, vestibulum sed, tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis.</p>
@@ -394,7 +460,10 @@
                 language: "Язык: Русский",
                 theme_dark: "Тема: Тёмная",
                 theme_light: "Тема: Светлая",
-                close: "Закрыть"
+                close: "Закрыть",
+                copy_notification: "Ссылка скопирована!",
+                copy_error: "Ошибка копирования: попробуйте скопировать вручную",
+                clicks: "Кликов: {count}"
             },
             en: {
                 title: "My Social Networks",
@@ -417,7 +486,10 @@
                 language: "Language: English",
                 theme_dark: "Theme: Dark",
                 theme_light: "Theme: Light",
-                close: "Close"
+                close: "Close",
+                copy_notification: "Link copied!",
+                copy_error: "Copy error: try copying manually",
+                clicks: "Clicks: {count}"
             }
         };
 
@@ -427,7 +499,7 @@
 
         // Function to update text colors
         function updateTextColors() {
-            document.querySelectorAll('.card-hover h3, .card-hover p, .card-hover button, .footer-text').forEach(element => {
+            document.querySelectorAll('.card-hover h3, .card-hover p, .card-hover button, .footer-text, .click-counter').forEach(element => {
                 if (currentTheme === 'light') {
                     element.style.color = '#1f2937';
                 } else {
@@ -456,7 +528,13 @@
             document.querySelectorAll('[data-lang-key]').forEach(element => {
                 const key = element.getAttribute('data-lang-key');
                 if (translations[currentLang][key]) {
-                    element.textContent = translations[currentLang][key];
+                    if (key === 'clicks') {
+                        const counterId = element.id;
+                        const count = parseInt(localStorage.getItem(counterId) || '0');
+                        element.textContent = translations[currentLang][key].replace('{count}', count);
+                    } else {
+                        element.textContent = translations[currentLang][key];
+                    }
                 }
             });
             document.getElementById('toggle-lang').textContent = translations[currentLang].language;
@@ -490,15 +568,99 @@
             modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
         }
 
+        // Function to show toast notification
+        function showToast(messageKey, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = translations[currentLang][messageKey];
+            toast.classList.remove('error');
+            if (isError) {
+                toast.classList.add('error');
+            }
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Function to copy text to clipboard with fallback
+        function copyToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('copy_notification');
+                }).catch(() => {
+                    fallbackCopyToClipboard(text);
+                });
+            } else {
+                fallbackCopyToClipboard(text);
+            }
+        }
+
+        // Fallback function using document.execCommand
+        function fallbackCopyToClipboard(text) {
+            try {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = '0';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                if (successful) {
+                    showToast('copy_notification');
+                } else {
+                    showToast('copy_error', true);
+                }
+            } catch (err) {
+                showToast('copy_error', true);
+            }
+        }
+
+        // Function to increment click counter
+        function incrementClickCounter(platform) {
+            const counterId = `${platform}-counter`;
+            let count = parseInt(localStorage.getItem(counterId) || '0');
+            count += 1;
+            localStorage.setItem(counterId, count);
+            const counterElement = document.getElementById(counterId);
+            counterElement.textContent = translations[currentLang]['clicks'].replace('{count}', count);
+        }
+
+        // Function to initialize click counters
+        function initializeClickCounters() {
+            const platforms = ['telegram', 'discord', 'vcru', 'donation', 'steam', 'youtube'];
+            platforms.forEach(platform => {
+                const counterId = `${platform}-counter`;
+                const count = parseInt(localStorage.getItem(counterId) || '0');
+                const counterElement = document.getElementById(counterId);
+                counterElement.textContent = translations[currentLang]['clicks'].replace('{count}', count);
+            });
+        }
+
+        // Function to create cursor trail
+        function createCursorTrail(event) {
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = `${event.clientX}px`;
+            trail.style.top = `${event.clientY}px`;
+            document.body.appendChild(trail);
+            setTimeout(() => {
+                trail.remove();
+            }, 500);
+        }
+
         // Event listeners
         document.getElementById('settings-toggle').addEventListener('click', toggleModal);
         document.getElementById('toggle-lang').addEventListener('click', toggleLanguage);
         document.getElementById('toggle-theme').addEventListener('click', toggleTheme);
         document.getElementById('close-modal').addEventListener('click', toggleModal);
+        document.addEventListener('mousemove', createCursorTrail);
 
-        // Initial text color and theme button text update
+        // Initial text color, theme button text, and click counters
         updateTextColors();
         updateThemeButtonText();
+        initializeClickCounters();
 
         // Falling sticks effect
         function createStick() {
@@ -523,4 +685,5 @@
             setTimeout(createStick, i * 150);
         }
     </script>
+<p style="border-radius: 8px; text-align: center; font-size: 12px; color: #fff; margin-top: 16px;position: fixed; left: 8px; bottom: 8px; z-index: 10; background: rgba(0, 0, 0, 0.8); padding: 4px 8px;">Made with <img src="https://enzostvs-deepsite.hf.space/logo.svg" alt="DeepSite Logo" style="width: 16px; height: 16px; vertical-align: middle;display:inline-block;margin-right:3px;filter:brightness(0) invert(1);"><a href="https://enzostvs-deepsite.hf.space" style="color: #fff;text-decoration: underline;" target="_blank" >DeepSite</a> - 🧬 <a href="https://enzostvs-deepsite.hf.space?remix=ForeverGuys/mylinks" style="color: #fff;text-decoration: underline;" target="_blank" >Remix</a></p></body>
 </html>
