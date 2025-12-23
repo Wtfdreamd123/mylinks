@@ -16,9 +16,26 @@
             animation: float 6s ease-in-out infinite;
         }
         .gradient-bg {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #16213e 75%, #1a1a2e 100%);
             animation: gradient-shift 8s ease infinite;
             background-size: 300% 300%;
+            position: relative;
+            overflow: hidden;
+        }
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(220, 38, 38, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(34, 197, 94, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(234, 179, 8, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(147, 51, 234, 0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
         .light-theme {
             background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 50%, #d1d5db 100%);
@@ -27,24 +44,32 @@
         @keyframes gradient-shift {
             0% { 
                 background-position: 0% 50%;
-                box-shadow: 0 0 20px rgba(71, 85, 105, 0.3);
+                box-shadow: 0 0 40px rgba(220, 38, 38, 0.15), 0 0 80px rgba(34, 197, 94, 0.1), 0 0 60px rgba(234, 179, 8, 0.1);
             }
             50% { 
                 background-position: 100% 50%;
-                box-shadow: 0 0 30px rgba(71, 85, 105, 0.5);
+                box-shadow: 0 0 60px rgba(220, 38, 38, 0.25), 0 0 100px rgba(34, 197, 94, 0.2), 0 0 120px rgba(234, 179, 8, 0.15);
             }
             100% { 
                 background-position: 0% 50%;
-                box-shadow: 0 0 20px rgba(71, 85, 105, 0.3);
+                box-shadow: 0 0 40px rgba(220, 38, 38, 0.15), 0 0 80px rgba(34, 197, 94, 0.1), 0 0 60px rgba(234, 179, 8, 0.1);
             }
         }
         .card-hover {
             transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)) !important;
         }
         .card-hover:hover {
             transform: translateY(-10px) scale(1.03);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
+            box-shadow: 0 20px 25px -5px rgba(220, 38, 38, 0.3), 0 10px 10px -5px rgba(34, 197, 94, 0.2);
+            filter: drop-shadow(0 0 8px rgba(234, 179, 8, 0.3));
+            border: 2px solid rgba(234, 179, 8, 0.5);
+            animation: card-glow 2s ease-in-out infinite;
+        }
+        @keyframes card-glow {
+            0%, 100% { box-shadow: 0 20px 25px -5px rgba(220, 38, 38, 0.3), 0 10px 10px -5px rgba(34, 197, 94, 0.2); }
+            50% { box-shadow: 0 20px 25px -5px rgba(220, 38, 38, 0.5), 0 10px 10px -5px rgba(34, 197, 94, 0.4), 0 0 20px rgba(234, 179, 8, 0.5); }
         }
         .light-theme .card-hover {
             border: 1px solid #1f2937;
@@ -105,20 +130,24 @@
         }
         .cursor-trail {
             position: fixed;
-            width: 6px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
+            width: 4px;
+            height: 4px;
             pointer-events: none;
-            z-index: 0;
-            animation: fade-trail 0.5s ease-out forwards;
+            z-index: 1000;
+            animation: fade-trail 0.6s ease-out forwards;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
         }
         .light-theme .cursor-trail {
             background: rgba(0, 0, 0, 0.4);
         }
         @keyframes fade-trail {
-            0% { opacity: 0.5; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0.5); }
+            0% { 
+                opacity: 0.6; 
+            }
+            100% { 
+                opacity: 0; 
+            }
         }
         .typing-text, .typing-subtext {
             overflow: hidden;
@@ -236,12 +265,289 @@
             color: #991b1b;
             border: 1px solid #991b1b;
         }
+        /* Поиск стили */
+        #search-input:focus {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .light-theme #search-input {
+            background: rgba(0, 0, 0, 0.1);
+            color: #1f2937;
+            border-color: #1f2937;
+        }
+        .light-theme #search-input::placeholder {
+            color: rgba(31, 41, 55, 0.5);
+        }
+        .card-hidden {
+            display: none !important;
+        }
+        /* Новогодние снежинки */
+        .snowflake {
+            position: fixed;
+            color: white;
+            font-size: 1.2em;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+            user-select: none;
+            z-index: 1;
+            pointer-events: none;
+            animation: snowfall linear forwards;
+        }
+        @keyframes snowfall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        /* Декоративные эффекты */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: particle-float 8s ease-in-out infinite;
+        }
+        @keyframes particle-float {
+            0%, 100% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0.6;
+            }
+            25% {
+                transform: translateY(-20px) translateX(10px) scale(1.2);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-40px) translateX(-10px) scale(0.8);
+                opacity: 0.8;
+            }
+            75% {
+                transform: translateY(-20px) translateX(5px) scale(1.1);
+                opacity: 0.9;
+            }
+        }
+        .glow-effect {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: glow-pulse 4s ease-in-out infinite;
+        }
+        @keyframes glow-pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.8;
+            }
+        }
+        .gradient-orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: orb-move 20s ease-in-out infinite;
+        }
+        .new-year-card {
+            position: relative;
+        }
+        .new-year-card::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, rgba(234, 179, 8, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: sparkle-glow 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes sparkle-glow {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.2);
+            }
+        }
+        .confetti-piece {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            pointer-events: none;
+            z-index: 100;
+            animation: confetti-fall 3s linear forwards;
+        }
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        @keyframes orb-move {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(100px, 100px) scale(1.2);
+            }
+            66% {
+                transform: translate(-100px, 150px) scale(0.8);
+            }
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+        }
+        /* Новогодняя гирлянда */
+        .christmas-lights {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            z-index: 5;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .light-bulb {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: light-blink 1.5s ease-in-out infinite;
+        }
+        .light-bulb:nth-child(odd) {
+            background: #dc2626;
+            box-shadow: 0 0 10px #dc2626;
+        }
+        .light-bulb:nth-child(even) {
+            background: #16a34a;
+            box-shadow: 0 0 10px #16a34a;
+        }
+        .light-bulb:nth-child(3n) {
+            background: #eab308;
+            box-shadow: 0 0 10px #eab308;
+        }
+        @keyframes light-blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.8); }
+        }
+        /* Плавающие новогодние иконки */
+        .floating-icon {
+            position: fixed;
+            font-size: 2em;
+            pointer-events: none;
+            z-index: 2;
+            animation: float-icon 15s ease-in-out infinite;
+            opacity: 0.6;
+        }
+        @keyframes float-icon {
+            0%, 100% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-30px) translateX(20px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(-60px) translateX(-20px) rotate(180deg);
+            }
+            75% {
+                transform: translateY(-30px) translateX(10px) rotate(270deg);
+            }
+        }
+        /* Новогодний баннер */
+        .new-year-banner {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .new-year-banner::before,
+        .new-year-banner::after {
+            content: '🎄';
+            position: absolute;
+            font-size: 1.5em;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        .new-year-banner::before {
+            left: -40px;
+            animation-delay: 0s;
+        }
+        .new-year-banner::after {
+            right: -40px;
+            animation-delay: 1s;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        /* Интерактивные эффекты при наведении */
+        .card-hover:hover .new-year-card::after {
+            animation: sparkle-glow 1s ease-in-out infinite;
+        }
+        .card-hover:hover .new-year-card span {
+            animation: spin 0.5s ease-in-out;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.3); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        /* Новогодние звезды в фоне */
+        .star-bg {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: #eab308;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: star-twinkle 3s ease-in-out infinite;
+            box-shadow: 0 0 6px #eab308;
+        }
+        @keyframes star-twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
     </style>
 </head>
 <body class="min-h-screen gradient-bg text-white font-sans">
+    <!-- Новогодняя гирлянда -->
+    <div class="christmas-lights" id="christmas-lights"></div>
+    
     <div class="container mx-auto px-4 py-16">
         <!-- Toast Notification -->
         <div id="toast" class="toast" data-lang-key="copy_notification">Ссылка скопирована!</div>
+
+        <!-- Search Bar -->
+        <div class="max-w-4xl mx-auto mb-6">
+            <div class="relative">
+                <input type="text" id="search-input" data-lang-key="search_placeholder" placeholder="Поиск по карточкам..." class="w-full px-4 py-3 pl-12 bg-white/10 backdrop-blur-lg border border-white/20 rounded-full text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all">
+                <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-white/50"></i>
+                <button id="clear-search" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/50 hover:text-white hidden">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
 
         <!-- Settings Button -->
         <div class="flex justify-end mb-4">
@@ -263,9 +569,11 @@
         <!-- Main Content -->
         <div class="max-w-4xl mx-auto text-center">
             <div class="floating mb-8 sm:mb-12 pt-8 sm:pt-0">
-                <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 typing-text" data-lang-key="welcome">
-                    Добро пожаловать
-                </h1>
+                <div class="new-year-banner">
+                    <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-red-400 via-green-400 to-yellow-300 typing-text" data-lang-key="welcome">
+                        🎄 Добро пожаловать 🎄
+                    </h1>
+                </div>
                 <p class="text-base sm:text-xl md:text-2xl opacity-90 typing-subtext px-2 sm:px-4" data-lang-key="subtitle">
                     Здесь ты можешь увидеть мои социальные сети!
                 </p>
@@ -274,19 +582,20 @@
             <!-- Social Links Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
                 <!-- Telegram Card -->
-                <div class="card-hover bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 flex flex-col h-full">
-                    <div class="text-5xl mb-4 text-blue-400">
+                <div class="card-hover bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 flex flex-col h-full new-year-card">
+                    <div class="text-5xl mb-4 text-blue-400 relative">
                         <i class="fab fa-telegram"></i>
+                        <span class="absolute -top-2 -right-2 text-2xl animate-pulse">✨</span>
                     </div>
                     <h3 class="text-2xl font-semibold mb-3" data-lang-key="telegram_title">Telegram</h3>
-                    <p class="mb-4 opacity-80 h-16" data-lang-key="telegram_desc">Telegram канал где много новостей и в дальнейшем будут розыгрыши!</p>
+                    <p class="mb-4 opacity-80 h-16" data-lang-key="telegram_desc">Присоединяйтесь к моему Telegram!</p>
                     <div class="mt-auto">
-                        <a href="https://t.me/chillcs2" class="hidden-link">Telegram</a>
+                        <a href="https://t.me/UNkm_TKtF" class="hidden-link">Telegram</a>
                         <div class="flex gap-2 mt-auto justify-center sm:justify-start">
-                            <button onclick="copyToClipboard('https://t.me/chillcs2')" class="w-10 h-10 flex items-center justify-center bg-blue-400 hover:bg-blue-500 rounded-full font-medium transition-all">
+                            <button onclick="copyToClipboard('https://t.me/UNkm_TKtF')" class="w-10 h-10 flex items-center justify-center bg-blue-400 hover:bg-blue-500 rounded-full font-medium transition-all">
                                 <i class="far fa-copy text-lg"></i>
                             </button>
-                            <button onclick="incrementClickCounter('telegram'); window.open('https://t.me/chillcs2', '_blank')" class="h-10 px-8 bg-blue-500 hover:bg-blue-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
+                            <button onclick="incrementClickCounter('telegram'); window.open('https://t.me/UNkm_TKtF', '_blank')" class="h-10 px-8 bg-blue-500 hover:bg-blue-600 rounded-full font-medium transition-all w-36 flex items-center justify-center" data-lang-key="go_button">
                                 Перейти
                             </button>
                         </div>
@@ -295,9 +604,10 @@
                 </div>
 
                 <!-- Discord Card -->
-                <div class="card-hover bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 flex flex-col h-full">
-                    <div class="text-5xl mb-4 text-indigo-400">
+                <div class="card-hover bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 flex flex-col h-full new-year-card">
+                    <div class="text-5xl mb-4 text-indigo-400 relative">
                         <i class="fab fa-discord"></i>
+                        <span class="absolute -top-2 -right-2 text-2xl animate-pulse">🎁</span>
                     </div>
                     <h3 class="text-2xl font-semibold mb-3" data-lang-key="discord_title">Discord</h3>
                     <p class="mb-4 opacity-80 h-16" data-lang-key="discord_desc">Присоединяйтесь к нашему Discord сообществу</p>
@@ -316,9 +626,10 @@
                 </div>
 
                 <!-- VC.RU Card -->
-                <div class="card-hover bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 flex flex-col h-full">
-                    <div class="text-5xl mb-4 text-amber-400">
+                <div class="card-hover bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 flex flex-col h-full new-year-card">
+                    <div class="text-5xl mb-4 text-amber-400 relative">
                         <i class="fas fa-newspaper"></i>
+                        <span class="absolute -top-2 -right-2 text-2xl animate-pulse">⭐</span>
                     </div>
                     <h3 class="text-2xl font-semibold mb-3" data-lang-key="vcru_title">VC.RU</h3>
                     <p class="mb-4 opacity-80 h-16" data-lang-key="vcru_desc">Читайте мои публикации на VC.RU</p>
@@ -337,9 +648,10 @@
                 </div>
 
                 <!-- DonationAlerts Card -->
-                <div class="card-hover bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 flex flex-col h-full">
-                    <div class="text-5xl mb-4 text-red-400">
+                <div class="card-hover bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 flex flex-col h-full new-year-card">
+                    <div class="text-5xl mb-4 text-red-400 relative">
                         <i class="fas fa-donate"></i>
+                        <span class="absolute -top-2 -right-2 text-2xl animate-pulse">💝</span>
                     </div>
                     <h3 class="text-2xl font-semibold mb-3" data-lang-key="donation_title">Поддержка</h3>
                     <p class="mb-4 opacity-80 h-16" data-lang-key="donation_desc">Поддержка деньгами через DonationAlerts</p>
@@ -358,9 +670,10 @@
                 </div>
 
                 <!-- Steam Trade Card -->
-                <div class="card-hover bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 flex flex-col h-full">
-                    <div class="text-5xl mb-4 text-gray-200 steam-icon">
+                <div class="card-hover bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 flex flex-col h-full new-year-card">
+                    <div class="text-5xl mb-4 text-gray-200 steam-icon relative">
                         <i class="fab fa-steam"></i>
+                        <span class="absolute -top-2 -right-2 text-2xl animate-pulse">🎮</span>
                     </div>
                     <h3 class="text-2xl font-semibold mb-3" data-lang-key="steam_title">Steam Trade</h3>
                     <p class="mb-4 opacity-80 h-16" data-lang-key="steam_desc">Поддержка скинами и предметами</p>
@@ -379,9 +692,10 @@
                 </div>
 
                 <!-- YouTube Card -->
-                <div class="card-hover bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 flex flex-col h-full">
-                    <div class="text-5xl mb-4 text-red-400">
+                <div class="card-hover bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 flex flex-col h-full new-year-card">
+                    <div class="text-5xl mb-4 text-red-400 relative">
                         <i class="fab fa-youtube"></i>
+                        <span class="absolute -top-2 -right-2 text-2xl animate-pulse">🎬</span>
                     </div>
                     <h3 class="text-2xl font-semibold mb-3" data-lang-key="youtube_title">YouTube</h3>
                     <p class="mb-4 opacity-80 h-16" data-lang-key="youtube_desc">YouTube канал где я выкладываю ролики</p>
@@ -403,7 +717,7 @@
             <!-- Footer -->
             <div class="mt-24 pt-8 border-t border-white/20 light-theme:border-t-[#1f2937]">
                 <div class="flex justify-center space-x-8 mb-6 footer-icons">
-                    <a href="https://t.me/chillcs2" class="text-3xl text-blue-400 hover:text-blue-300 transition" title="Telegram">
+                    <a href="https://t.me/UNkm_TKtF" class="text-3xl text-blue-400 hover:text-blue-300 transition" title="Telegram">
                         <i class="fab fa-telegram"></i>
                     </a>
                     <a href="https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT" class="text-3xl text-gray-200 hover:text-gray-300 transition steam-icon" title="Steam Trade">
@@ -416,7 +730,7 @@
                         <i class="fab fa-youtube"></i>
                     </a>
                 </div>
-                <p class="text-white/60 footer-text">19.07.2025</p>
+                <p class="text-white/60 footer-text">🎅 19.07.2025 🎅</p>
             </div>
         </div>
     </div>
@@ -444,7 +758,7 @@
                 welcome: "Добро пожаловать",
                 subtitle: "Здесь ты можешь увидеть мои социальные сети!",
                 telegram_title: "Telegram",
-                telegram_desc: "Telegram канал где много новостей и в дальнейшем будут розыгрыши!",
+                telegram_desc: "Присоединяйтесь к моему Telegram!",
                 discord_title: "Discord",
                 discord_desc: "Присоединяйтесь к нашему Discord сообществу",
                 vcru_title: "VC.RU",
@@ -463,14 +777,15 @@
                 close: "Закрыть",
                 copy_notification: "Ссылка скопирована!",
                 copy_error: "Ошибка копирования: попробуйте скопировать вручную",
-                clicks: "Кликов: {count}"
+                clicks: "Кликов: {count}",
+                search_placeholder: "Поиск по карточкам..."
             },
             en: {
                 title: "My Social Networks",
                 welcome: "Welcome",
                 subtitle: "Here you can see my social networks!",
                 telegram_title: "Telegram",
-                telegram_desc: "Telegram channel with lots of news and upcoming giveaways!",
+                telegram_desc: "Join my Telegram!",
                 discord_title: "Discord",
                 discord_desc: "Join our Discord community",
                 vcru_title: "VC.RU",
@@ -489,7 +804,8 @@
                 close: "Close",
                 copy_notification: "Link copied!",
                 copy_error: "Copy error: try copying manually",
-                clicks: "Clicks: {count}"
+                clicks: "Clicks: {count}",
+                search_placeholder: "Search cards..."
             }
         };
 
@@ -538,6 +854,10 @@
                 }
             });
             document.getElementById('toggle-lang').textContent = translations[currentLang].language;
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.placeholder = translations[currentLang].search_placeholder;
+            }
             updateThemeButtonText();
             const typingText = document.querySelector('.typing-text');
             const typingSubtext = document.querySelector('.typing-subtext');
@@ -638,16 +958,21 @@
             });
         }
 
-        // Function to create cursor trail
+        // Function to create cursor trail (простой стиль)
+        let trailCount = 0;
         function createCursorTrail(event) {
+            trailCount++;
+            // Создаем след только каждые 8 движений
+            if (trailCount % 8 !== 0) return;
+            
             const trail = document.createElement('div');
             trail.className = 'cursor-trail';
-            trail.style.left = `${event.clientX}px`;
-            trail.style.top = `${event.clientY}px`;
+            trail.style.left = `${event.clientX - 2}px`;
+            trail.style.top = `${event.clientY - 2}px`;
             document.body.appendChild(trail);
             setTimeout(() => {
                 trail.remove();
-            }, 500);
+            }, 600);
         }
 
         // Event listeners
@@ -661,6 +986,37 @@
         updateTextColors();
         updateThemeButtonText();
         initializeClickCounters();
+
+        // Поиск по карточкам
+        const searchInput = document.getElementById('search-input');
+        const clearSearchBtn = document.getElementById('clear-search');
+        const cards = document.querySelectorAll('.card-hover');
+
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                const desc = card.querySelector('p')?.textContent.toLowerCase() || '';
+                
+                if (searchTerm === '' || title.includes(searchTerm) || desc.includes(searchTerm)) {
+                    card.classList.remove('card-hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('card-hidden');
+                }
+            });
+
+            clearSearchBtn.classList.toggle('hidden', searchTerm === '');
+        }
+
+        searchInput.addEventListener('input', performSearch);
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            performSearch();
+        });
+
 
         // Falling sticks effect
         function createStick() {
@@ -684,5 +1040,167 @@
         for (let i = 0; i < 20; i++) {
             setTimeout(createStick, i * 150);
         }
+
+        // Создание новогодних снежинок
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.className = 'snowflake';
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            snowflake.style.opacity = Math.random() * 0.5 + 0.5;
+            snowflake.style.fontSize = (Math.random() * 10 + 12) + 'px';
+            document.body.appendChild(snowflake);
+            setTimeout(() => {
+                snowflake.remove();
+            }, 6000);
+        }
+
+        // Создание частиц
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            // Новогодние цвета: красный, зеленый, золотой
+            const colors = [
+                'rgba(220, 38, 38, 0.6)',
+                'rgba(34, 197, 94, 0.6)',
+                'rgba(234, 179, 8, 0.6)',
+                'rgba(255, 255, 255, 0.6)'
+            ];
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            document.body.appendChild(particle);
+            setTimeout(() => {
+                particle.remove();
+            }, 8000);
+        }
+
+        // Создание градиентных орбов
+        function createGradientOrbs() {
+            for (let i = 0; i < 3; i++) {
+                const orb = document.createElement('div');
+                orb.className = 'gradient-orb';
+                orb.style.left = (Math.random() * 50 + 25) + '%';
+                orb.style.top = (Math.random() * 50 + 25) + '%';
+                orb.style.animationDelay = i * 2 + 's';
+                orb.style.background = i === 0 
+                    ? 'radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%)'
+                    : i === 1
+                    ? 'radial-gradient(circle, rgba(147, 51, 234, 0.2) 0%, transparent 70%)'
+                    : 'radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, transparent 70%)';
+                document.body.appendChild(orb);
+            }
+        }
+
+        // Функция создания конфетти
+        function createConfetti(x, y) {
+            const colors = ['#dc2626', '#16a34a', '#eab308', '#ffffff'];
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti-piece';
+                    confetti.style.left = (x || Math.random() * 100) + '%';
+                    confetti.style.top = (y || -10) + 'px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = (Math.random() * 6 + 4) + 'px';
+                    confetti.style.height = (Math.random() * 6 + 4) + 'px';
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0%';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 50);
+            }
+        }
+
+        // Создание новогодней гирлянды
+        function createChristmasLights() {
+            const lightsContainer = document.getElementById('christmas-lights');
+            const lightCount = Math.floor(window.innerWidth / 30);
+            for (let i = 0; i < lightCount; i++) {
+                const light = document.createElement('div');
+                light.className = 'light-bulb';
+                light.style.left = (i * (100 / lightCount)) + '%';
+                light.style.top = '10px';
+                light.style.animationDelay = (i * 0.1) + 's';
+                lightsContainer.appendChild(light);
+            }
+        }
+
+        // Создание плавающих новогодних иконок
+        function createFloatingIcons() {
+            const icons = ['🎄', '⭐', '🎁', '❄', '🎅', '✨'];
+            for (let i = 0; i < 6; i++) {
+                const icon = document.createElement('div');
+                icon.className = 'floating-icon';
+                icon.textContent = icons[i];
+                icon.style.left = (Math.random() * 80 + 10) + '%';
+                icon.style.top = (Math.random() * 60 + 20) + '%';
+                icon.style.animationDelay = (i * 2.5) + 's';
+                icon.style.animationDuration = (15 + Math.random() * 10) + 's';
+                document.body.appendChild(icon);
+            }
+        }
+
+        // Создание звезд в фоне
+        function createStars() {
+            for (let i = 0; i < 30; i++) {
+                const star = document.createElement('div');
+                star.className = 'star-bg';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (2 + Math.random() * 2) + 's';
+                document.body.appendChild(star);
+            }
+        }
+
+        // Запуск декоративных эффектов
+        createGradientOrbs();
+        createChristmasLights();
+        createFloatingIcons();
+        createStars();
+        setInterval(createParticle, 500);
+        setInterval(createSnowflake, 400); // Новогодние снежинки
+        
+        // Конфетти при клике на кнопки "Перейти"
+        document.querySelectorAll('button[onclick*="window.open"]').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const rect = button.getBoundingClientRect();
+                createConfetti(rect.left + rect.width / 2, rect.top);
+            });
+        });
+
+        // Интерактивный эффект при наведении на заголовок
+        const welcomeTitle = document.querySelector('[data-lang-key="welcome"]');
+        if (welcomeTitle) {
+            welcomeTitle.addEventListener('mouseenter', () => {
+                createConfetti(window.innerWidth / 2, 100);
+            });
+        }
+        
+        // Создание частиц при движении мыши
+        let mouseParticleTimeout;
+        document.addEventListener('mousemove', (e) => {
+            if (mouseParticleTimeout) clearTimeout(mouseParticleTimeout);
+            mouseParticleTimeout = setTimeout(() => {
+                if (Math.random() > 0.7) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = e.clientX + 'px';
+                    particle.style.top = e.clientY + 'px';
+                    particle.style.width = '6px';
+                    particle.style.height = '6px';
+                    particle.style.background = 'rgba(59, 130, 246, 0.8)';
+                    particle.style.animationDuration = '2s';
+                    document.body.appendChild(particle);
+                    setTimeout(() => particle.remove(), 2000);
+                }
+            }, 100);
+        });
+
     </script>
 </html>
