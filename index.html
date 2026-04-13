@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои социальные сети</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== ОБНОВЛЁННЫЕ СТИЛИ (БЕЗ НОВОГОДНЕЙ ТЕМАТИКИ) ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            transition: background 0.3s ease, color 0.2s ease;
+        }
+
+        /* Современный градиентный фон (тёмная тема) */
+        .gradient-bg {
+            background: linear-gradient(145deg, #0b0e14 0%, #141a24 50%, #0f172a 100%);
+            background-attachment: fixed;
+        }
+
+        /* Светлая тема */
+        .light-theme {
+            background: linear-gradient(145deg, #f8fafc 0%, #eef2f6 50%, #e2e8f0 100%);
+            color: #0f172a;
+        }
+
+        .light-theme .card-hover {
+            background: rgba(255, 255, 255, 0.85) !important;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .light-theme .card-hover h3,
+        .light-theme .card-hover p,
+        .light-theme .card-hover .click-counter {
+            color: #0f172a;
+        }
+
+        .light-theme .footer-text {
+            color: #334155;
+        }
+
+        .light-theme .settings-button {
+            background: rgba(0, 0, 0, 0.04);
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+
+        .light-theme .settings-button:hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        /* Плавающая анимация */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Карточки */
+        .card-hover {
+            transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+            background: rgba(20, 30, 45, 0.7) !important;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 30px -8px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Кнопка настроек */
+        .settings-button {
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #e2e8f0;
+            border-radius: 40px;
+            padding: 0.5rem 1rem;
+        }
+
+        .settings-button:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: scale(1.02);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Печатающийся текст */
+        .typing-text, .typing-subtext {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid;
+            width: 0;
+        }
+
+        .typing-text {
+            animation: typing 1.4s steps(30, end) forwards, blink-caret 0.75s step-end 3 forwards;
+            border-right-color: #60a5fa;
+        }
+
+        .typing-subtext {
+            animation: typing 1.4s steps(40, end) 1.4s forwards, blink-caret 0.75s step-end 3 forwards;
+            border-right-color: #94a3b8;
+            animation-delay: 1.4s;
+        }
+
+        .light-theme .typing-text {
+            border-right-color: #2563eb;
+        }
+        .light-theme .typing-subtext {
+            border-right-color: #475569;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: inherit }
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            padding: 28px;
+            border-radius: 28px;
+            width: 90%;
+            max-width: 420px;
+            border: 1px solid #475569;
+            color: #f1f5f9;
+            box-shadow: 0 25px 35px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .light-theme .modal-content {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            color: #0f172a;
+            box-shadow: 0 25px 35px -10px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-content button {
+            width: 100%;
+            margin: 8px 0;
+            padding: 12px 16px;
+            border-radius: 40px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .modal-content button:hover {
+            transform: scale(1.01);
+            filter: brightness(1.1);
+        }
+
+        /* Toast уведомление */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-weight: 500;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #ef4444;
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .light-theme .toast {
+            background: #059669;
+            color: white;
+        }
+
+        .light-theme .toast.error {
+            background: #dc2626;
+        }
+
+        /* Поиск */
+        #search-input {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 60px;
+            padding: 0.9rem 1.2rem 0.9rem 3rem;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        #search-input:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #818cf8;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+        }
+
+        .light-theme #search-input {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+
+        .light-theme #search-input::placeholder {
+            color: #64748b;
+        }
+
+        .light-theme #search-input:focus {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Скрытые элементы */
+        .hidden-link {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        .card-hidden {
+            display: none !important;
+        }
+
+        /* Счетчик кликов */
+        .click-counter {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: 400;
+        }
+
+        /* Иконки в футере */
+        .footer-icons a {
+            transition: transform 0.2s, opacity 0.2s;
+            opacity: 0.8;
+        }
+
+        .footer-icons a:hover {
+            transform: translateY(-3px);
+            opacity: 1;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 640px) {
+            .container { padding-left: 1rem; padding-right: 1rem; }
+            h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg text-white font-sans antialiased">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" data-lang-key="copy_notification">Ссылка скопирована!</div>
+
+    <div class="container mx-auto px-4 py-12 md:py-16">
+        
+        <!-- Search Bar -->
+        <div class="max-w-3xl mx-auto mb-6">
+            <div class="relative">
+                <i class="fas fa-search absolute left-5 top-1/2 transform -translate-y-1/2 text-white/40 z-10"></i>
+                <input type="text" id="search-input" data-lang-key="search_placeholder" placeholder="Поиск по карточкам..." 
+                       class="w-full pl-12 pr-12">
+                <button id="clear-search" class="absolute right-5 top-1/2 transform -translate-y-1/2 text-white/40 hover:text-white/80 transition hidden">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Settings Button -->
+        <div class="flex justify-end mb-2 max-w-3xl mx-auto">
+            <button class="settings-button" id="settings-toggle">
+                <i class="fas fa-sliders-h mr-2"></i><span data-lang-key="settings_title">Настройки</span>
+            </button>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal" id="settings-modal">
+            <div class="modal-content">
+                <h2 class="text-2xl font-semibold mb-5 flex items-center gap-2">
+                    <i class="fas fa-cog text-indigo-400"></i>
+                    <span data-lang-key="settings_title">Настройки</span>
+                </h2>
+                <button id="toggle-lang" class="bg-indigo-500 hover:bg-indigo-600 text-white flex items-center justify-center gap-2">
+                    <i class="fas fa-globe"></i> <span data-lang-key="language">Язык: Русский</span>
+                </button>
+                <button id="toggle-theme" class="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center gap-2">
+                    <i class="fas fa-palette"></i> <span data-lang-key="theme_dark">Тема: Тёмная</span>
+                </button>
+                <button id="close-modal" class="bg-rose-500 hover:bg-rose-600 text-white mt-2 flex items-center justify-center gap-2">
+                    <i class="fas fa-times"></i> <span data-lang-key="close">Закрыть</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="floating mb-10 pt-4">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-blue-400 to-emerald-400 typing-text" 
+                    data-lang-key="welcome">
+                    Добро пожаловать
+                </h1>
+                <p class="text-lg sm:text-xl md:text-2xl opacity-80 typing-subtext px-2 font-light" 
+                   data-lang-key="subtitle">
+                    Здесь собраны мои социальные сети
+                </p>
+            </div>
+
+            <!-- Social Links Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7 mb-16">
+                
+                <!-- Telegram Card -->
+                <div class="card-hover rounded-3xl p-6 flex flex-col h-full">
+                    <div class="text-5xl mb-4 text-blue-400">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2" data-lang-key="telegram_title">Telegram</h3>
+                    <p class="mb-5 opacity-75 text-sm leading-relaxed" data-lang-key="telegram_desc">Присоединяйтесь к моему Telegram!</p>
+                    <div class="mt-auto">
+                        <a href="https://t.me/UNkm_TKtF" class="hidden-link">Telegram</a>
+                        <div class="flex gap-3 justify-center sm:justify-start">
+                            <button onclick="copyToClipboard('https://t.me/UNkm_TKtF')" 
+                                    class="w-10 h-10 flex items-center justify-center bg-blue-500/20 hover:bg-blue-500/40 rounded-full transition border border-blue-400/30">
+                                <i class="far fa-copy text-blue-300"></i>
+                            </button>
+                            <button onclick="incrementClickCounter('telegram'); window.open('https://t.me/UNkm_TKtF', '_blank')" 
+                                    class="h-10 px-7 bg-blue-600 hover:bg-blue-700 rounded-full font-medium transition shadow-lg shadow-blue-900/20 flex items-center gap-2">
+                                <span data-lang-key="go_button">Перейти</span> <i class="fas fa-arrow-right text-sm"></i>
+                            </button>
+                        </div>
+                        <p class="click-counter" id="telegram-counter" data-lang-key="clicks">Кликов: 0</p>
+                    </div>
+                </div>
+
+                <!-- Discord Card (обновлённая ссылка) -->
+                <div class="card-hover rounded-3xl p-6 flex flex-col h-full">
+                    <div class="text-5xl mb-4 text-indigo-400">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2" data-lang-key="discord_title">Discord</h3>
+                    <p class="mb-5 opacity-75 text-sm leading-relaxed" data-lang-key="discord_desc">Присоединяйтесь к нашему Discord сообществу</p>
+                    <div class="mt-auto">
+                        <a href="https://discord.com/invite/HaxDQywzY4" class="hidden-link">Discord</a>
+                        <div class="flex gap-3 justify-center sm:justify-start">
+                            <button onclick="copyToClipboard('https://discord.com/invite/HaxDQywzY4')" 
+                                    class="w-10 h-10 flex items-center justify-center bg-indigo-500/20 hover:bg-indigo-500/40 rounded-full transition border border-indigo-400/30">
+                                <i class="far fa-copy text-indigo-300"></i>
+                            </button>
+                            <button onclick="incrementClickCounter('discord'); window.open('https://discord.com/invite/HaxDQywzY4', '_blank')" 
+                                    class="h-10 px-7 bg-indigo-600 hover:bg-indigo-700 rounded-full font-medium transition shadow-lg shadow-indigo-900/20 flex items-center gap-2">
+                                <span data-lang-key="go_button">Перейти</span> <i class="fas fa-arrow-right text-sm"></i>
+                            </button>
+                        </div>
+                        <p class="click-counter" id="discord-counter" data-lang-key="clicks">Кликов: 0</p>
+                    </div>
+                </div>
+
+                <!-- VC.RU Card -->
+                <div class="card-hover rounded-3xl p-6 flex flex-col h-full">
+                    <div class="text-5xl mb-4 text-amber-400">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2" data-lang-key="vcru_title">VC.RU</h3>
+                    <p class="mb-5 opacity-75 text-sm leading-relaxed" data-lang-key="vcru_desc">Читайте мои публикации на VC.RU</p>
+                    <div class="mt-auto">
+                        <a href="https://vc.ru/id4989855" class="hidden-link">VC.RU</a>
+                        <div class="flex gap-3 justify-center sm:justify-start">
+                            <button onclick="copyToClipboard('https://vc.ru/id4989855')" 
+                                    class="w-10 h-10 flex items-center justify-center bg-amber-500/20 hover:bg-amber-500/40 rounded-full transition border border-amber-400/30">
+                                <i class="far fa-copy text-amber-300"></i>
+                            </button>
+                            <button onclick="incrementClickCounter('vcru'); window.open('https://vc.ru/id4989855', '_blank')" 
+                                    class="h-10 px-7 bg-amber-600 hover:bg-amber-700 rounded-full font-medium transition shadow-lg shadow-amber-900/20 flex items-center gap-2">
+                                <span data-lang-key="go_button">Перейти</span> <i class="fas fa-arrow-right text-sm"></i>
+                            </button>
+                        </div>
+                        <p class="click-counter" id="vcru-counter" data-lang-key="clicks">Кликов: 0</p>
+                    </div>
+                </div>
+
+                <!-- DonationAlerts Card -->
+                <div class="card-hover rounded-3xl p-6 flex flex-col h-full">
+                    <div class="text-5xl mb-4 text-rose-400">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2" data-lang-key="donation_title">Поддержка</h3>
+                    <p class="mb-5 opacity-75 text-sm leading-relaxed" data-lang-key="donation_desc">Поддержка деньгами через DonationAlerts</p>
+                    <div class="mt-auto">
+                        <a href="https://www.donationalerts.com/r/Wtfdreamd" class="hidden-link">DonationAlerts</a>
+                        <div class="flex gap-3 justify-center sm:justify-start">
+                            <button onclick="copyToClipboard('https://www.donationalerts.com/r/Wtfdreamd')" 
+                                    class="w-10 h-10 flex items-center justify-center bg-rose-500/20 hover:bg-rose-500/40 rounded-full transition border border-rose-400/30">
+                                <i class="far fa-copy text-rose-300"></i>
+                            </button>
+                            <button onclick="incrementClickCounter('donation'); window.open('https://www.donationalerts.com/r/Wtfdreamd', '_blank')" 
+                                    class="h-10 px-7 bg-rose-600 hover:bg-rose-700 rounded-full font-medium transition shadow-lg shadow-rose-900/20 flex items-center gap-2">
+                                <span data-lang-key="go_button">Перейти</span> <i class="fas fa-arrow-right text-sm"></i>
+                            </button>
+                        </div>
+                        <p class="click-counter" id="donation-counter" data-lang-key="clicks">Кликов: 0</p>
+                    </div>
+                </div>
+
+                <!-- Steam Trade Card -->
+                <div class="card-hover rounded-3xl p-6 flex flex-col h-full">
+                    <div class="text-5xl mb-4 text-slate-300">
+                        <i class="fab fa-steam"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2" data-lang-key="steam_title">Steam Trade</h3>
+                    <p class="mb-5 opacity-75 text-sm leading-relaxed" data-lang-key="steam_desc">Поддержка скинами и предметами</p>
+                    <div class="mt-auto">
+                        <a href="https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT" class="hidden-link">Steam Trade</a>
+                        <div class="flex gap-3 justify-center sm:justify-start">
+                            <button onclick="copyToClipboard('https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT')" 
+                                    class="w-10 h-10 flex items-center justify-center bg-slate-600/30 hover:bg-slate-600/50 rounded-full transition border border-slate-400/30">
+                                <i class="far fa-copy text-slate-300"></i>
+                            </button>
+                            <button onclick="incrementClickCounter('steam'); window.open('https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT', '_blank')" 
+                                    class="h-10 px-7 bg-slate-700 hover:bg-slate-800 rounded-full font-medium transition shadow-lg shadow-slate-900/20 flex items-center gap-2">
+                                <span data-lang-key="go_button">Перейти</span> <i class="fas fa-arrow-right text-sm"></i>
+                            </button>
+                        </div>
+                        <p class="click-counter" id="steam-counter" data-lang-key="clicks">Кликов: 0</p>
+                    </div>
+                </div>
+
+                <!-- YouTube Card -->
+                <div class="card-hover rounded-3xl p-6 flex flex-col h-full">
+                    <div class="text-5xl mb-4 text-red-400">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2" data-lang-key="youtube_title">YouTube</h3>
+                    <p class="mb-5 opacity-75 text-sm leading-relaxed" data-lang-key="youtube_desc">YouTube канал где я выкладываю ролики</p>
+                    <div class="mt-auto">
+                        <a href="https://www.youtube.com/@fanzy8237" class="hidden-link">YouTube</a>
+                        <div class="flex gap-3 justify-center sm:justify-start">
+                            <button onclick="copyToClipboard('https://www.youtube.com/@fanzy8237')" 
+                                    class="w-10 h-10 flex items-center justify-center bg-red-500/20 hover:bg-red-500/40 rounded-full transition border border-red-400/30">
+                                <i class="far fa-copy text-red-300"></i>
+                            </button>
+                            <button onclick="incrementClickCounter('youtube'); window.open('https://www.youtube.com/@fanzy8237', '_blank')" 
+                                    class="h-10 px-7 bg-red-600 hover:bg-red-700 rounded-full font-medium transition shadow-lg shadow-red-900/20 flex items-center gap-2">
+                                <span data-lang-key="go_button">Перейти</span> <i class="fas fa-arrow-right text-sm"></i>
+                            </button>
+                        </div>
+                        <p class="click-counter" id="youtube-counter" data-lang-key="clicks">Кликов: 0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="mt-16 pt-8 border-t border-white/10 light-theme:border-gray-300">
+                <div class="flex justify-center space-x-8 mb-5 footer-icons">
+                    <a href="https://t.me/UNkm_TKtF" class="text-3xl text-blue-400 hover:text-blue-300 transition" title="Telegram">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                    <a href="https://steamcommunity.com/tradeoffer/new/?partner=1228716079&token=w0YGhoPT" class="text-3xl text-slate-300 hover:text-white transition" title="Steam Trade">
+                        <i class="fab fa-steam"></i>
+                    </a>
+                    <a href="https://discord.com/invite/HaxDQywzY4" class="text-3xl text-indigo-400 hover:text-indigo-300 transition" title="Discord">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@fanzy8237" class="text-3xl text-red-400 hover:text-red-300 transition" title="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+                <p class="text-white/40 text-sm footer-text">© 2025 · Все ссылки в одном месте</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ---------- ГЛОБАЛЬНЫЕ ФУНКЦИИ (чтобы onclick работал) ----------
+        const translations = {
+            ru: {
+                title: "Мои социальные сети",
+                welcome: "Добро пожаловать",
+                subtitle: "Здесь собраны мои социальные сети",
+                telegram_title: "Telegram",
+                telegram_desc: "Присоединяйтесь к моему Telegram!",
+                discord_title: "Discord",
+                discord_desc: "Присоединяйтесь к нашему Discord сообществу",
+                vcru_title: "VC.RU",
+                vcru_desc: "Читайте мои публикации на VC.RU",
+                donation_title: "Поддержка",
+                donation_desc: "Поддержка деньгами через DonationAlerts",
+                steam_title: "Steam Trade",
+                steam_desc: "Поддержка скинами и предметами",
+                youtube_title: "YouTube",
+                youtube_desc: "YouTube канал где я выкладываю ролики",
+                go_button: "Перейти",
+                settings_title: "Настройки",
+                language: "Язык: Русский",
+                theme_dark: "Тема: Тёмная",
+                theme_light: "Тема: Светлая",
+                close: "Закрыть",
+                copy_notification: "Ссылка скопирована!",
+                copy_error: "Ошибка копирования",
+                clicks: "Кликов: {count}",
+                search_placeholder: "Поиск по карточкам..."
+            },
+            en: {
+                title: "My Social Networks",
+                welcome: "Welcome",
+                subtitle: "Here are my social networks",
+                telegram_title: "Telegram",
+                telegram_desc: "Join my Telegram!",
+                discord_title: "Discord",
+                discord_desc: "Join our Discord community",
+                vcru_title: "VC.RU",
+                vcru_desc: "Read my publications on VC.RU",
+                donation_title: "Support",
+                donation_desc: "Support with donations via DonationAlerts",
+                steam_title: "Steam Trade",
+                steam_desc: "Support with skins and items",
+                youtube_title: "YouTube",
+                youtube_desc: "YouTube channel where I post videos",
+                go_button: "Go",
+                settings_title: "Settings",
+                language: "Language: English",
+                theme_dark: "Theme: Dark",
+                theme_light: "Theme: Light",
+                close: "Close",
+                copy_notification: "Link copied!",
+                copy_error: "Copy error",
+                clicks: "Clicks: {count}",
+                search_placeholder: "Search cards..."
+            }
+        };
+
+        let currentLang = 'ru';
+        let currentTheme = 'dark';
+
+        // Делаем функции доступными глобально
+        window.copyToClipboard = function(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => showToast('copy_notification')).catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        };
+
+        function fallbackCopy(text) {
+            try {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed'; ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                const success = document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast(success ? 'copy_notification' : 'copy_error', !success);
+            } catch (e) {
+                showToast('copy_error', true);
+            }
+        }
+
+        window.incrementClickCounter = function(platform) {
+            const counterId = `${platform}-counter`;
+            let count = parseInt(localStorage.getItem(counterId) || '0') + 1;
+            localStorage.setItem(counterId, count);
+            const el = document.getElementById(counterId);
+            if (el) el.textContent = translations[currentLang].clicks.replace('{count}', count);
+        };
+
+        function showToast(msgKey, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = translations[currentLang][msgKey] || msgKey;
+            toast.classList.toggle('error', isError);
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // Остальная логика (язык, тема, поиск, модалка)
+        function applyLanguage() {
+            document.documentElement.lang = currentLang;
+            document.title = translations[currentLang].title;
+            document.querySelectorAll('[data-lang-key]').forEach(el => {
+                const key = el.getAttribute('data-lang-key');
+                if (translations[currentLang][key]) {
+                    if (key === 'clicks') {
+                        const counterId = el.id;
+                        const count = parseInt(localStorage.getItem(counterId) || '0');
+                        el.textContent = translations[currentLang][key].replace('{count}', count);
+                    } else {
+                        el.textContent = translations[currentLang][key];
+                    }
+                }
+            });
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) searchInput.placeholder = translations[currentLang].search_placeholder;
+            updateThemeButtonText();
+        }
+
+        function updateThemeButtonText() {
+            const themeBtn = document.getElementById('toggle-theme');
+            if (themeBtn) {
+                themeBtn.innerHTML = `<i class="fas fa-palette"></i> ${translations[currentLang][currentTheme === 'dark' ? 'theme_dark' : 'theme_light']}`;
+            }
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ru' ? 'en' : 'ru';
+            applyLanguage();
+            const typingText = document.querySelector('.typing-text');
+            const typingSubtext = document.querySelector('.typing-subtext');
+            if (typingText) {
+                typingText.style.animation = 'none';
+                typingSubtext.style.animation = 'none';
+                setTimeout(() => {
+                    typingText.style.animation = 'typing 1.4s steps(30, end) forwards, blink-caret 0.75s step-end 3 forwards';
+                    typingSubtext.style.animation = 'typing 1.4s steps(40, end) 1.4s forwards, blink-caret 0.75s step-end 3 forwards';
+                }, 10);
+            }
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.classList.toggle('light-theme', currentTheme === 'light');
+            updateThemeButtonText();
+        }
+
+        function initCounters() {
+            ['telegram', 'discord', 'vcru', 'donation', 'steam', 'youtube'].forEach(platform => {
+                const el = document.getElementById(`${platform}-counter`);
+                if (el) {
+                    const count = localStorage.getItem(`${platform}-counter`) || '0';
+                    el.textContent = translations[currentLang].clicks.replace('{count}', count);
+                }
+            });
+        }
+
+        function filterCards() {
+            const term = document.getElementById('search-input').value.trim().toLowerCase();
+            const cards = document.querySelectorAll('.card-hover');
+            const clearBtn = document.getElementById('clear-search');
+            cards.forEach(card => {
+                const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                const desc = card.querySelector('p')?.textContent.toLowerCase() || '';
+                card.classList.toggle('card-hidden', term !== '' && !title.includes(term) && !desc.includes(term));
+            });
+            clearBtn.classList.toggle('hidden', term === '');
+        }
+
+        // Инициализация после загрузки DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            applyLanguage();
+            initCounters();
+
+            document.getElementById('toggle-lang').addEventListener('click', toggleLanguage);
+            document.getElementById('toggle-theme').addEventListener('click', toggleTheme);
+            
+            const modal = document.getElementById('settings-modal');
+            document.getElementById('settings-toggle').addEventListener('click', () => modal.style.display = 'flex');
+            document.getElementById('close-modal').addEventListener('click', () => modal.style.display = 'none');
+            modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+            
+            const searchInput = document.getElementById('search-input');
+            const clearSearch = document.getElementById('clear-search');
+            searchInput.addEventListener('input', filterCards);
+            clearSearch.addEventListener('click', () => { searchInput.value = ''; filterCards(); });
+            
+            window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.style.display === 'flex') modal.style.display = 'none'; });
+        });
+    </script>
+</body>
+</html>
