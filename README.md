@@ -1,3 +1,3 @@
-👉 Вот сайт, где собраны все ваши соцсети с открытым исходным кодом, который можно скачать!
+👉 Вот сайт, где собраны все мои соцсети с открытым исходным кодом, который можно скачать!
 
-👉 Here is a website where all your open source social networks are collected, which can be downloaded!
+👉 Here's a site where I have all my social media profiles, with open source code available for download!
